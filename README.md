@@ -18,6 +18,10 @@ The above runs the `/resources/input.txt` as the initial input.
 **Running the tests:**
 
     npm test
+    
+On windows you can do (from root dir): 
+
+	node node_modules\mocha\bin\mocha
 
 ### Defining your own instructions:
 Robots are by default simple; they don't know how to execute any actions. Thus, they need to be configured with an instruction set. Robots in this example use the instructions within `/src/core/instructions.js`.
