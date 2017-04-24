@@ -1,15 +1,16 @@
-const Surface = require('./Surface')
-const Orientation = require('../constants/Orientation')
+const Surface = require('./Surface');
+const Orientation = require('../constants/Orientation');
 
 const defaults = {
   position: { x: 0, y: 0 },
   orientation: Orientation.N,
 
   // Let's hardcode the speed for now. We can extend it in the future if needed.
-  speed: 1
-}
+  speed: 1,
+};
 
-const isKnownInstruction = (action, instructions) => action != null && instructions[action]
+const isKnownInstruction = (action, instructions) =>
+  action != null && instructions[action];
 
 class Robot {
   /**
@@ -18,16 +19,20 @@ class Robot {
    * @param {Object} instructions - The robot instructions.
    * @param {Surface} surface - The surface of Mars.
    */
-  constructor(properties = defaults, instructions = {}, surface = new Surface) {
+  constructor(
+    properties = defaults,
+    instructions = {},
+    surface = new Surface()
+  ) {
     // initialise defaults within the properties
-    this.properties = Object.assign({}, defaults, properties)
+    this.properties = Object.assign({}, defaults, properties);
 
-    this.instructions = instructions
-    this.surface = surface
-    this.history = []
-    this.lost = false
+    this.instructions = instructions;
+    this.surface = surface;
+    this.history = [];
+    this.lost = false;
 
-    this.record() // Record the initial robot status.
+    this.record(); // Record the initial robot status.
   }
 
   /**
@@ -39,40 +44,38 @@ class Robot {
    */
   instruct(action = null) {
     if (!this.lost && isKnownInstruction(action, this.instructions)) {
-      const nextMove = this.instructions[action](this.properties)
+      const nextMove = this.instructions[action](this.properties);
 
       if (this.surface.isWithinBounds(nextMove.position)) {
-        this.properties = Object.assign({}, this.properties, nextMove)
-        this.record()
-        return this
+        this.properties = Object.assign({}, this.properties, nextMove);
+        this.record();
+        return this;
       }
 
-      const { position } = this.properties
+      const { position } = this.properties;
       if (!this.surface.isMarked(position)) {
-        this.lost = true
-        this.surface.mark(position)
-        this.record()
-        return this
+        this.lost = true;
+        this.surface.mark(position);
+        this.record();
+        return this;
       }
     }
 
-    return this
+    return this;
   }
 
   /**
    * Records the current status of the robot; position, orientation and status (lost) are recorded.
    */
   record() {
-    const { x, y } = this.properties.position
-    const orientation = Orientation[this.properties.orientation]
-    this.history.push(
-      `${x} ${y} ${orientation}${this.lost ? ' LOST': ''}`
-    )
+    const { x, y } = this.properties.position;
+    const orientation = Orientation[this.properties.orientation];
+    this.history.push(`${x} ${y} ${orientation}${this.lost ? ' LOST' : ''}`);
   }
 
   status() {
-    return this.history[this.history.length - 1]
+    return this.history[this.history.length - 1];
   }
 }
 
-module.exports = Robot
+module.exports = Robot;

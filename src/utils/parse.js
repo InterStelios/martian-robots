@@ -1,11 +1,11 @@
-const Orientation = require('../constants/Orientation')
+const Orientation = require('../constants/Orientation');
 
 /**
  * Checks whether the given value is empty.
  * @param {String} val - The value to check.
  * @return {boolean}
  */
-const isNotEmpty = val => val.trim().length
+const isNotEmpty = val => val.trim().length;
 
 /**
  * Creates a 2D vector object.
@@ -15,15 +15,15 @@ const isNotEmpty = val => val.trim().length
  */
 const createVector = (x = 0, y = 0) => ({
   x: Number(x),
-  y: Number(y)
-})
+  y: Number(y),
+});
 
 /**
  * Checks wether the given vector object exceeds the maximum coordinate value.
  * @param {Object} vector - The vector to check.
  * @return {boolean}
  */
-const exceedsMaximum = ({ x, y }) => x >= 50 || y >= 50
+const exceedsMaximum = ({ x, y }) => x >= 50 || y >= 50;
 
 /**
  * Prunes the input by applying the following.
@@ -37,22 +37,22 @@ const exceedsMaximum = ({ x, y }) => x >= 50 || y >= 50
  */
 module.exports.prune = input =>
   input
-  .toUpperCase()
-  .split('\n')
-  .filter(isNotEmpty)
-  .map(line =>
-    line.split(' ').filter(isNotEmpty)
-  )
-  .map(command => {
-    if (command.length === 1) {
-      const instruction = command[0]
-      if (instruction.length > 100) {
-        throw new Error('Instruction strings should be less than 100 characters in length')
+    .toUpperCase()
+    .split('\n')
+    .filter(isNotEmpty)
+    .map(line => line.split(' ').filter(isNotEmpty))
+    .map(command => {
+      if (command.length === 1) {
+        const instruction = command[0];
+        if (instruction.length > 100) {
+          throw new Error(
+            'Instruction strings should be less than 100 characters in length'
+          );
+        }
+        return instruction.split('');
       }
-      return instruction.split('')
-    }
-    return command
-  })
+      return command;
+    });
 
 /**
  * Extracts surface size from the given array of coordinates. Throws the appropriate Error if
@@ -62,17 +62,19 @@ module.exports.prune = input =>
  */
 module.exports.extractSurfaceSize = ([x, y]) => {
   if (isNaN(x) || isNaN(y)) {
-    throw new Error(`Surface maximum values should be numbers: ${x}, ${y}`)
+    throw new Error(`Surface maximum values should be numbers: ${x}, ${y}`);
   }
 
-  const size = createVector(x, y)
+  const size = createVector(x, y);
 
   if (exceedsMaximum(size)) {
-    throw new Error('Maximum value for any coordinate for Surface should not exceed 50.')
+    throw new Error(
+      'Maximum value for any coordinate for Surface should not exceed 50.'
+    );
   }
 
-  return size
-}
+  return size;
+};
 
 /**
  * Extracts properties from the given array of options. Throws the appropriate Error if
@@ -82,17 +84,19 @@ module.exports.extractSurfaceSize = ([x, y]) => {
  */
 module.exports.extractProperties = ([x, y, direction]) => {
   if (isNaN(x) || isNaN(y)) {
-    throw new Error(`Robot position should be numbers: ${x}, ${y}`)
+    throw new Error(`Robot position should be numbers: ${x}, ${y}`);
   }
 
-  const position = createVector(x, y)
+  const position = createVector(x, y);
 
   if (exceedsMaximum(position)) {
-    throw new Error('Maximum value for any coordinate for Robot position should not exceed 50.')
+    throw new Error(
+      'Maximum value for any coordinate for Robot position should not exceed 50.'
+    );
   }
 
   return {
     position,
-    orientation: Orientation[direction]
-  }
-}
+    orientation: Orientation[direction],
+  };
+};

@@ -6,12 +6,12 @@
  */
 exports.add = (v1, v2) => ({
   x: v1.x + v2.x,
-  y: v1.y + v2.y
-})
+  y: v1.y + v2.y,
+});
 
 /**
  * Converts the given angle in degrees to radians.
  * @param {int} theta - The angle in degrees to convert.
  * @return {int} The converted angle in radians.
  */
-exports.radians = theta => theta * Math.PI / 180
+exports.radians = theta => theta * Math.PI / 180;
